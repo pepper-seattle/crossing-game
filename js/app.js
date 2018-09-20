@@ -2,20 +2,30 @@
 let Enemy = function() {
     // //properties
     //     // x and y coordinates
-    //     this.x = x;
-    //     this.y = y;
+        //y values top to bottom: 68, 151, 234
+        //x values always start at -103
+        this.startY = 151;
+        this.startX = -103;
+        //ending value:
+        //402 is the player's last x coordinate on the right side before going off screen
+        this.endX = 402;
+
+        this.x = this.startX;
+        this.y = this.startY;
     //     // The image/sprite for our enemies
-    //     this.sprite = 'images/enemy-bug.png';
+        this.sprite = 'images/enemy-bug.png';
     // //methods
     //     //update position
-    //     this.updatePos: function() {
-    //         console.log('updated enemy position!')
-    //     }
-    //         //collision check
+    //        //enemies movement based on time
+
+    //     //collision check
+
     //     //render
-    //         //draw enemies on current x and y
+    //      //draw enemies on current x and y
+    
     //     //reset
-    //         //set x and y to starting x and y
+    //      //set x and y to starting x and y
+            //so if an enemy's x coordinate is greater than 402? then 
 };
 
 // Update the enemy's position, required method for game
@@ -34,9 +44,14 @@ Enemy.prototype.render = function() {
 // Hero Class
 class Hero {
     constructor() {
-        //initializing coordinates
-        this.x = 200;
-        this.y = 400;
+        //initializing coordinates and starting location
+        this.startY = 390;
+        this.startX = 205;
+        this.x = this.startX;
+        this.y = this.startY;
+        //movement values
+        this.sideToSide = 101;
+        this.upAndDown = 83;
         // player image
         this.sprite = 'images/char-horn-girl.png';
     }
@@ -44,16 +59,24 @@ class Hero {
     handleInput(input) {
         switch(input) {
             case 'left':
-                this.x -= 100;
+                if(this.x > 3) {
+                   this.x -= this.sideToSide;
+                }
                 break;
             case 'right': 
-                this.x += 100;
+                if(this.x < this.sideToSide * 4) {
+                this.x += this.sideToSide;
+                }
                 break;
             case 'up':
-                this.y -= 85;
+                if(this.y > -25){
+                    this.y -= this.upAndDown;
+                }
                 break;
             case 'down':
-                this.y += 85;
+                if(this.y < this.startY){
+                    this.y += this.upAndDown;
+                }
                 break;
         }
     }
