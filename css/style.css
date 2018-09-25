@@ -1,10 +1,61 @@
 body {
     background-color: #000000;
     color: #ffffff;
-    text-align: center;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
 }
 
 canvas {
     background-color: #ffffff;
+    border: 6px solid #add8e6;
     border-radius: 2%;
+}
+
+.win-modal {
+    background-color: #ffffff;
+    border: 6px solid #00bd00;
+    border-radius: 2%;
+    color: #000000;
+    display: flex;
+    width: 375px;
+    height: 200px;
+    padding: 10px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    visibility: hidden;
+}
+
+.win-modal-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    text-align: center;
+}
+
+.win-modal h1 {
+    color: #00bd00;
+    font-size: 48px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.win-modal button {
+    background-color: #d3d3d3;
+    font-size: 12px;
+    font-weight: bold;
+    height: 25px;
+}
+
+button:hover {
+    background-color: #636363;
+    color: #ffffff;
+    outline: none;
 }

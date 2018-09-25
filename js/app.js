@@ -1,47 +1,48 @@
-// Enemies our player must avoid
-let Enemy = function() {
-    // //properties
-    //     // x and y coordinates
-        //y values top to bottom: 68, 151, 234
-        //x values always start at -103
-        this.startY = 151;
-        this.startX = -103;
-        //ending value:
-        //402 is the player's last x coordinate on the right side before going off screen
-        this.endX = 402;
+//Pick up modal for use below
+const modal = document.querySelector(".win-modal");
 
-        this.x = this.startX;
-        this.y = this.startY;
-    //     // The image/sprite for our enemies
-        this.sprite = 'images/enemy-bug.png';
-    // //methods
-    //     //update position
-    //        //enemies movement based on time
+//Enemy creation function
+const Enemy = function(startY, speed) {
+    //x values start at -103
+    this.startX = -103;
+    //y values top to bottom: 60, 145, 225
+    this.startY = startY;
 
-    //     //collision check
+    //coordinates
+    this.x = this.startX;
+    this.y = this.startY;
 
-    //     //render
-    //      //draw enemies on current x and y
-    
-    //     //reset
-    //      //set x and y to starting x and y
-            //so if an enemy's x coordinate is greater than 402? then 
+    //step value for enemy movement
+    this.step = 103;
+
+    //speed of each enemy
+    this.speed = speed;
+
+    //enemy boundary value for right edge of board
+    this.boundary = this.step * 5;
+
+    //enemy image sprite
+    this.sprite = 'images/enemy-bug.png';
 };
 
-// Update the enemy's position, required method for game
-// Parameter: dt, a time delta between ticks
+//Update enemy position
 Enemy.prototype.update = function(dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
+    // while enemy is on gameboard have them move at a speed of 175 * the time delta
+    if(this.x < this.boundary){
+        //move enemy right
+        this.x += this.speed * dt;
+    } else {
+        //reset to starting position
+        this.x = this.startX;
+    }
 };
 
-// Draw the enemy on the screen, required method for game
+//Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-// Hero Class
+//Hero Class
 class Hero {
     constructor() {
         //initializing coordinates and starting location
@@ -50,7 +51,7 @@ class Hero {
         this.x = this.startX;
         this.y = this.startY;
         //movement values
-        this.sideToSide = 101;
+        this.step = 101;
         this.upAndDown = 83;
         // player image
         this.sprite = 'images/char-horn-girl.png';
@@ -60,12 +61,12 @@ class Hero {
         switch(input) {
             case 'left':
                 if(this.x > 3) {
-                   this.x -= this.sideToSide;
+                   this.x -= this.step;
                 }
                 break;
             case 'right': 
-                if(this.x < this.sideToSide * 4) {
-                this.x += this.sideToSide;
+                if(this.x < this.step * 4) {
+                this.x += this.step;
                 }
                 break;
             case 'up':
@@ -80,43 +81,47 @@ class Hero {
                 break;
         }
     }
-    //collision check
-    collisionCheck() {
-        //boundaries check
-        if(this.x === 100){
-            reset();
-        } else {
-            this.updatePos();
-        }
-    }
-        // //check for win
-        // this.winCheck: function(){
-        //     //if player won then reset and do a thing to say they won
-        //     console.log('YOU WON!')
-        //     reset();
-        // }        
-        //render
+
+    //player render method
     render() {
         //draw player on current x and y
         ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
     }
-        // // keyboard input
-        // this.keyInput: function() {
-        //     //update player's x and y property according to input
-        //     this.x = x;
-        //     this.y = y;
-        // }
-            
-        //reset
-            //set x and y to starting x and y
+
+    //player update method - includes collision and win checks, reset function
+    update() {
+        //collision check
+        for(let enemy of allEnemies){
+            if(this.y === enemy.y && (enemy.x + enemy.step - 20 > this.x && enemy.x < this.x + this.step - 20)) {
+                this.reset();
+            }
+        }
+        //check for win
+        if(this.y < 58) {
+            modal.style.visibility = 'visible';
+        }
+    }
+    //resets player to bottom center of gameboard
+    reset() {
+        this.y = this.startY;
+        this.x = this.startX;
+    }
 }
 
 //New hero object
-let player = new Hero();
-//Init allEnemies array
+const player = new Hero();
+
+//Enemy Objects with starting y coordinate and custom speeds
+const bug1 = new Enemy(58, 200);
+const bug2 = new Enemy(58, 125);
+const bug3 = new Enemy(141, 155);
+const bug4 = new Enemy(141, 75);
+const bug5 = new Enemy(224, 100);
+const bug6 = new Enemy(224, 80);
+
 //For each enemy create and push new enemy object into array above
-
-
+const allEnemies = [];
+allEnemies.push(bug1, bug2, bug3, bug4, bug5, bug6);
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -130,3 +135,9 @@ document.addEventListener('keyup', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+//function tied to the win modal button to play again
+const playAgain = () => {
+    modal.style.visibility = 'hidden';
+    player.reset();
+};
