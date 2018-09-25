@@ -6,11 +6,12 @@ Welcome to the classic arcade game frogger, this time with adorable ladybugs! In
 How to Run the Game
 ===================
 * To run the game locally open the index.html file in a browser.
+
 * Alternatively you can use simple server on port 8000
-* * Download game files
-* * Navigate to the base game folder in terminal, command line, etc.
-* * Run python -m SimpleHTTPServer
-* * In a browser enter http://localhost:8000
+1. Download game files
+2. Navigate to the base game folder in terminal, command line, etc.
+3. Run python -m SimpleHTTPServer
+4. In a browser enter http://localhost:8000
 
 How To Play
 ===========
